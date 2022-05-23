@@ -1,7 +1,7 @@
 import json
 baseURI = "https://gateway.pinata.cloud/ipfs/QmTR1LwPScSaknte6VuJbvmq8fLw584Z5kMwPJ54w9aFc2/"
 
-for i in range(2):
+for i in range(7):
     data = {
         "name": f"MCUOSC #{i}",
         "description": f"mcuosc #{i}",

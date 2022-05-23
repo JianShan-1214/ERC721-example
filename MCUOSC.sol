@@ -37,6 +37,7 @@ contract MCUOSC is ERC721, Ownable {
     }
 
     function _mint() internal {
+        totalSupply += 1;
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(msg.sender, tokenId);
