@@ -10,13 +10,12 @@ contract MCUOSC is ERC721, Ownable {
     using Strings for uint256;
 
     Counters.Counter private _tokenIdCounter;
-    
-    bool public _revealed = false;
+
     uint256 public constant MAX_SUPPLY = 7;
-    uint256 public mintPrice = 0.05 ether;
+    uint256 public mintPrice = 0.0000000000005 ether;
     uint256 totalSupply = 0;
 
-
+    mapping(uint256 => bool) public tokenRevealed;
 
     constructor() ERC721("MCUOSC", "MO") {}
 
@@ -41,21 +40,26 @@ contract MCUOSC is ERC721, Ownable {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(msg.sender, tokenId);
+        tokenRevealed[tokenId] = false;
     }
 
-    function tokenURI(uint256 tokenId)public view override returns(string memory){
+    function tokenURI(uint256 tokenId) public view override returns (string memory) {
         require(
             _exists(tokenId),
             "URI query for nonexistent token"
         );
-        if(_revealed == false){
+        if(tokenRevealed[tokenId] == false){
             return "https://gateway.pinata.cloud/ipfs/QmR5YGsQfFcuaxX7QHbYvtDTV7R8e4wPzYNPYjUFb5cpFy";
         }
         return string(abi.encodePacked(_baseURI(), tokenId.toString(), ".json"));
     }
 
-    function flipReveal() public onlyOwner{
-        _revealed = !_revealed;
+    function flipReveal(uint256 tokenId) public {
+        require(
+            _isApprovedOrOwner(_msgSender(), tokenId),
+            "Caller is not owner nor approved"
+        );
+        tokenRevealed[tokenId] = !tokenRevealed[tokenId];
     }
     
 }
